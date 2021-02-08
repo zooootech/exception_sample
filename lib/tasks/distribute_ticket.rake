@@ -10,9 +10,10 @@ namespace :distribute_ticket do
         # メソッド名に「!」をつけると、実行に失敗したときfalseを返すのではなく例外を発生させるようになる
         user.increment!(:ticket_count, 10)
       # rescueは、発生した例外を捕捉し、例外が起こった際に呼び出される条件節
-    # rescue => eという記述は、発生した例外をrescue ~ end間の処理内でeという変数に入れて扱う、という意味
+      # 繰り返し処理の内部にrescueを記述した場合は、例外が発生したとしても次のループに移る
+      # rescue => eという記述は、発生した例外をrescue ~ end間の処理内でeという変数に入れて扱う、という意味
       rescue => e
-        Rails.logger.debug e.message　# 発生した例外をログに記録
+        Rails.logger.debug e.message # 発生した例外をログに記録
       end
     end
   end
