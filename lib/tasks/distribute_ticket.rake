@@ -30,4 +30,15 @@ namespace :distribute_ticket do
       end
     end
   end
+
+  desc "全ユーザーのticket_countをトランザクションで10増加させる"
+  # トランザクションは、レコードの更新を行う複数の処理を1つにまとめて行うことを指す
+  # トランザクションを利用することにより、「処理の一部は成功し、一部は失敗した」という事象は発生せず、すべての処理の成功または失敗のみの状態を作ることができる
+  task transact: :environment do
+    ActiveRecord::Base.transaction do
+      User.find_each do |user|
+        user.increment!(:ticket_count, 10)
+      end
+    end
+  end
 end
