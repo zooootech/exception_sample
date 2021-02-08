@@ -16,4 +16,18 @@ namespace :distribute_ticket do
       end
     end
   end
+
+  desc "全ユーザーの中にticket_countが10枚追加されると最大値より大きくなるレコードがある場合に例外を発生させる"
+  task raise: :environment do
+    User.find_each do |user|
+      begin
+        if user.ticket_count > 2147483647 - 10
+          # raiseは、例外を発生させることができる文法で、第一引数に発生させたい例外クラス、第二引数にエラーメッセージを記述して使用する
+          raise RangeError, "#{user.id}は、チケット取得可能枚数の上限を超えてしまいます！"
+        end
+      rescue => e
+        Rails.logger.debug e.message
+      end
+    end
+  end
 end
